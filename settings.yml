@@ -1,0 +1,44 @@
+linked_words:
+  type: string
+  default: |
+    [
+      {
+        "words": "discourse|meta",
+        "replacement": "https://www.discourse.org"
+      }
+    ]
+  json_schema: |
+    {
+      "type": "array",
+      "format": "tabs",
+      "uniqueItems": true,
+      "title": "Linked Words",
+      "items": {
+        "type": "object",
+        "title": "Words",
+        "headerTemplate": "{{ self.words }}",
+        "properties": {
+          "words": {
+            "type": "string",
+            "title": "Words"
+          },
+          "replacement": {
+            "title": "Replacement",
+            "type": "string",
+            "format": "textarea",
+            "options": {
+              "input_height": "100px"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+excluded_tags:
+  type: list
+  list_type: compact
+  default: code|pre
+excluded_classes:
+  type: list
+  list_type: compact
+  default: onebox

@@ -1,0 +1,18 @@
+.tooltipfy-word {
+  border-bottom: 1px dotted;
+  display: inline-block;
+  line-height: normal;
+}
+
+// Tabbable tabs
+//
+// Hide tabbable panes to start, show them when `.active`
+
+.tab-content {
+  > .tab-pane {
+    display: none;
+  }
+  > .active {
+    display: block;
+  }
+}
