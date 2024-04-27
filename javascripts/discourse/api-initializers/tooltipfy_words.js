@@ -22,17 +22,41 @@ export default apiInitializer("0.11.1", (api) => {
   });
 
   const createTooltip = (helper, text, value) => {
-    const triggers = helper.widget.site.mobileView
-      ? ["hold"]
-      : ["hover", "click"];
-
     return helper.renderGlimmer(
       "span.tooltipfy-word",
-      hbs`<DTooltip @interactive={{true}} @inline={{true}} @triggers={{@data.triggers}} @identifier="tooltipfy">
+      hbs`<DTooltip @interactive={{true}} @inline={{true}} @onRegisterApi={{@data.onRegisterApi}} @triggers={{@data.triggers}} @identifier="tooltipfy">
             <:trigger>{{@data.text}}</:trigger>
             <:content>{{@data.value}}</:content>
           </DTooltip>`,
-      { text, value: htmlSafe(value), triggers }
+      {
+        text,
+        value: htmlSafe(value),
+        triggers: helper.widget.site.mobileView ? [] : ["hover", "click"],
+        onRegisterApi: (instance) => {
+          if (!helper.widget.site.mobileView) {
+            return;
+          }
+
+          let touchStartX, touchStartY, touchEndX, touchEndY;
+
+          instance.trigger.addEventListener("touchstart", function (event) {
+            touchStartX = event.touches[0].clientX;
+            touchStartY = event.touches[0].clientY;
+          });
+
+          instance.trigger.addEventListener("touchend", function (event) {
+            touchEndX = event.changedTouches[0].clientX;
+            touchEndY = event.changedTouches[0].clientY;
+
+            if (
+              Math.abs(touchStartX - touchEndX) < 10 &&
+              Math.abs(touchStartY - touchEndY) < 10
+            ) {
+              instance.onTrigger();
+            }
+          });
+        },
+      }
     );
   };
 
