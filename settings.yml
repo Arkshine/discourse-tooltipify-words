@@ -10,7 +10,6 @@ linked_words:
   json_schema: |
     {
       "type": "array",
-      "format": "tabs",
       "uniqueItems": true,
       "title": "Linked Words",
       "items": {

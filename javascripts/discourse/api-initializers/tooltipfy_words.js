@@ -1,7 +1,7 @@
+import { htmlSafe } from "@ember/template";
+import { hbs } from "ember-cli-htmlbars";
 import { apiInitializer } from "discourse/lib/api";
 import { readInputList, traverseNodes } from "../lib/utilities";
-import { hbs } from "ember-cli-htmlbars";
-import { htmlSafe } from "@ember/template";
 
 export default apiInitializer("0.11.1", (api) => {
   let skipTags = {
@@ -24,16 +24,21 @@ export default apiInitializer("0.11.1", (api) => {
   const createTooltip = function (helper, text, value) {
     return helper.renderGlimmer(
       "span.tooltipfy-word",
-      hbs`{{@data.text}} <DTooltip @interactive={{true}}>{{@data.value}}</DTooltip>`,
+      hbs`<DTooltip @interactive={{true}}>
+            <:trigger>{{@data.text}}</:trigger>
+            <:content>{{@data.value}}</:content>
+          </DTooltip>`,
       { text, value: htmlSafe(value) }
     );
   };
 
-  let Action = function (inputListName, method) {
-    this.inputListName = inputListName;
-    this.createNode = method;
-    this.inputs = {};
-  };
+  class Action {
+    constructor(inputListName, method) {
+      this.inputListName = inputListName;
+      this.createNode = method;
+      this.inputs = {};
+    }
+  }
 
   let linkify = new Action("linked_words", createTooltip);
   let actions = [linkify];
