@@ -21,14 +21,18 @@ export default apiInitializer("0.11.1", (api) => {
     cls && (skipClasses[cls] = true);
   });
 
-  const createTooltip = function (helper, text, value) {
+  const createTooltip = (helper, text, value) => {
+    const triggers = helper.widget.site.mobileView
+      ? ["hold"]
+      : ["hover", "click"];
+
     return helper.renderGlimmer(
       "span.tooltipfy-word",
-      hbs`<DTooltip @interactive={{true}} @identifier="tooltipfy">
+      hbs`<DTooltip @interactive={{true}} @inline={{true}} @triggers={{@data.triggers}} @identifier="tooltipfy">
             <:trigger>{{@data.text}}</:trigger>
             <:content>{{@data.value}}</:content>
           </DTooltip>`,
-      { text, value: htmlSafe(value) }
+      { text, value: htmlSafe(value), triggers }
     );
   };
 
