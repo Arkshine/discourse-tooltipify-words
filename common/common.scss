@@ -4,15 +4,8 @@
   line-height: normal;
 }
 
-// Tabbable tabs
-//
-// Hide tabbable panes to start, show them when `.active`
-
-.tab-content {
-  > .tab-pane {
-    display: none;
-  }
-  > .active {
+[data-identifier="tooltipfy"] {
+  .fk-d-tooltip__inner-content {
     display: block;
   }
 }

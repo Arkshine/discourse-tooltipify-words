@@ -24,7 +24,7 @@ export default apiInitializer("0.11.1", (api) => {
   const createTooltip = function (helper, text, value) {
     return helper.renderGlimmer(
       "span.tooltipfy-word",
-      hbs`<DTooltip @interactive={{true}}>
+      hbs`<DTooltip @interactive={{true}} @identifier="tooltipfy">
             <:trigger>{{@data.text}}</:trigger>
             <:content>{{@data.value}}</:content>
           </DTooltip>`,
