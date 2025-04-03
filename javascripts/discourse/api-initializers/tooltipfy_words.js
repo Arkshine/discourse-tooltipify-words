@@ -21,11 +21,9 @@ export default apiInitializer("0.11.1", (api) => {
     cls && (skipClasses[cls] = true);
   });
 
-  const createTooltip = (helper, text, value) => {
-    if (settings.debug_mode) {
-      console.log("mobileview", helper?.widget.site.mobileView);
-    }
+  const site = api.container.lookup("service:site");
 
+  const createTooltip = (helper, text, value) => {
     return helper.renderGlimmer(
       "span.tooltipfy-word",
       hbs`<DTooltip @interactive={{true}} @inline={{true}} @onRegisterApi={{@data.onRegisterApi}} @triggers={{@data.triggers}} @identifier="tooltipfy">
@@ -35,14 +33,9 @@ export default apiInitializer("0.11.1", (api) => {
       {
         text,
         value: htmlSafe(value),
-        triggers: helper.widget.site.mobileView ? [] : ["hover", "click"],
+        triggers: site.mobileView ? [] : ["hover", "click"],
         onRegisterApi: (instance) => {
-          if (settings.debug_mode) {
-            console.log("onRegisterApi", instance);
-            console.log("mobileview", helper?.widget.site.mobileView);
-          }
-
-          if (!helper.widget.site.mobileView) {
+          if (!site.mobileView) {
             return;
           }
 
@@ -51,25 +44,11 @@ export default apiInitializer("0.11.1", (api) => {
           instance.trigger.addEventListener("touchstart", function (event) {
             touchStartX = event.touches[0].clientX;
             touchStartY = event.touches[0].clientY;
-
-            if (settings.debug_mode) {
-              console.log("touchstart", touchStartX, touchStartY);
-            }
           });
 
           instance.trigger.addEventListener("touchend", function (event) {
             touchEndX = event.changedTouches[0].clientX;
             touchEndY = event.changedTouches[0].clientY;
-
-            if (settings.debug_mode) {
-              console.log(
-                "touchend",
-                touchStartX,
-                touchStartY,
-                Math.abs(touchStartX - touchEndX),
-                Math.abs(touchStartY - touchEndY)
-              );
-            }
 
             if (
               Math.abs(touchStartX - touchEndX) < 10 &&
@@ -97,7 +76,7 @@ export default apiInitializer("0.11.1", (api) => {
 
   api.decorateCookedElement(
     (element, helper) => {
-      if (!helper) {
+      if (!helper?.getModel()) {
         return;
       }
 
@@ -107,6 +86,6 @@ export default apiInitializer("0.11.1", (api) => {
         }
       });
     },
-    { id: "tooltipfy-words-theme" }
+    { onlyStream: true }
   );
 });

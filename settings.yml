@@ -33,9 +33,6 @@ linked_words:
         "additionalProperties": false
       }
     }
-debug_mode:
-  type: bool
-  default: false
 excluded_tags:
   type: list
   list_type: compact
