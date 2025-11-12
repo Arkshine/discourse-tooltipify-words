@@ -1,6 +1,6 @@
 import Component from "@ember/component";
 import { service } from "@ember/service";
-import DTooltip from "discourse/components/d-tooltip";
+import DTooltip from "float-kit/components/d-tooltip";
 
 export default class TooltipWrapper extends Component {
   @service site;
